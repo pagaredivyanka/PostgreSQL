@@ -61,3 +61,48 @@ SELECT id, type, value, updated_at
 FROM public.contacts
 ORDER BY updated_at DESC
 LIMIT 10;
+
+-- 12. Unique type + platform combinations
+
+SELECT DISTINCT type, platform
+FROM public.contacts;
+
+-- 13. Group by type and filter (HAVING) for large groups
+
+SELECT type, COUNT(*) AS total
+FROM public.contacts
+GROUP BY type
+HAVING COUNT(*) > 100;
+
+-- 14. Extract year-wise contacts
+
+SELECT EXTRACT(YEAR FROM created_at) AS year, COUNT(*) AS total
+FROM public.contacts
+GROUP BY year
+ORDER BY year;
+
+-- 15. Most common eformat types
+
+SELECT eformat, COUNT(*) AS usage_count
+FROM public.contacts
+GROUP BY eformat
+ORDER BY usage_count DESC;
+
+-- 16. find all unverified contacts
+
+SELECT id, value, type
+FROM public.contacts
+WHERE verified = false
+LIMIT 100;
+
+-- 17. Get all distinct channels 
+
+SELECT DISTINCT channel 
+FROM public.contacts;
+
+-- 18. Window function: Rank contacts by recent update
+
+SELECT id, object_id, updated_at,
+	RANK() OVER (ORDER BY updated_at DESC) AS updated_rank
+FROM public.contacts;
+
